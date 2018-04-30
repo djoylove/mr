@@ -81,4 +81,4 @@ do_mr(){
 }
 
 echo "Usage: " $(basename $0) "mr" "target_branch" "title"
-eval do_$1 $2 $3
+eval do_mr $1 $2
