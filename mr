@@ -34,7 +34,7 @@ getMergeRequestInfo() {
     getProject
     NAME_ENCODE=${PROJECT_NAME//\//%2F}
     ENCODE_URL="$GITLAB_API_ADDRESS/$GET_PROJECT_URL/$NAME_ENCODE"
-    PROJECT_INFO_RESPONSE=`curl "$ENCODE_URL$AUTHENTICATION_URL"`
+    PROJECT_INFO_RESPONSE=`curl -s "$ENCODE_URL$AUTHENTICATION_URL"`
     MERGE_REQUESTS=$(echo $PROJECT_INFO_RESPONSE | grep -o -E $MERGE_REQUEST_PATTERN)
     if [ -z "$PROJECT_INFO_RESPONSE" ] || [ -z "$MERGE_REQUESTS" ]; then
         echo "get merge request url fail, pls check your git config"
@@ -70,7 +70,7 @@ do_mr(){
   fi
   getMergeRequestInfo
   echo "Creating Merge Request...   source_branch=$SOURCE_BRANCH and target_branch=$1"
-  RESULT=`curl -d "description=$DESCRIPTION&title=$SOURCE_BRANCH&source_branch=$SOURCE_BRANCH&target_branch=$1" "$MERGE_REQUEST_URL$AUTHENTICATION_URL"`
+  RESULT=`curl -s -d "description=$DESCRIPTION&title=$SOURCE_BRANCH&source_branch=$SOURCE_BRANCH&target_branch=$1" "$MERGE_REQUEST_URL$AUTHENTICATION_URL"`
   RESULT_MERGE_REQUEST_PATTERN="$GITLAB_ADDRESS$PROJECT_NAME/merge_requests/[0-9]+"
   RETURN_MERGE_REQUESTS_URL=`echo "$RESULT" |grep -o -E "$RESULT_MERGE_REQUEST_PATTERN"`
   if [ -z "$RETURN_MERGE_REQUESTS_URL" ];then
